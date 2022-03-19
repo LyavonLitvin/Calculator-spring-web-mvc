@@ -12,12 +12,19 @@ public class User {
 
     private int idUser;
     private int userRoleId;
-    @NotBlank(message = "hhh")
-    @NotEmpty // "  "
-    //    @Pattern(regexp = "sdsd")
-    //    @Email(regexp = "  ")
+    @NotBlank // " " true
+    @NotEmpty //"    " false
+    //	@Pattern()
+//	@Max(45)
+//	@Range(min = 3, max = 15)
+//	@Size()
+//	@Email(regexp = "")
     private String name;
+    @NotBlank(message = Constants.MSG_ERROR_LOGIN_IS_BLANK)
+    @NotEmpty(message = Constants.MSG_ERROR_LOGIN_IS_EMPTY)
     private String login;
+    @NotBlank(message = Constants.MSG_ERROR_PASSWORD_IS_BLANK)
+    @NotEmpty(message = Constants.MSG_ERROR_PASSWORD_IS_EMPTY)
     private String password;
     private String email;
     private String secretQuestion;

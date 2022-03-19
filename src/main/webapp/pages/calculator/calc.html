@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculator Page</title>
+</head>
+<body>
+
+<form th:method="post" th:action="@{/calc}" th:object="${result}">
+    <input type="text" th:field="*{firstNumber}" id="value1" placeholder="Value 1">
+    <td th:if="${#fields.hasErrors('firstNumber')}" th:errors="*{firstNumber}">firstNumber error</td>
+
+    <br/>
+
+    <select th:field="*{operatorType}" id="operatorType">
+        <option value="null" selected>Select operation</option>
+        <option value="sum">+</option>
+        <option value="subtract">-</option>
+        <option value="multiply">*</option>
+        <option value="divide">/</option>
+    </select>
+    <td th:if="${#fields.hasErrors('operatorType')}" th:errors="*{operatorType}">operatorType error</td>
+
+    <br/>
+
+    <input type="text" th:field="*{secondNumber}" id="secondNumber" placeholder="secondNumber">
+    <td th:if="${#fields.hasErrors('secondNumber')}" th:errors="*{secondNumber}">secondNumber error</td>
+
+    <br/>
+
+    <input type="submit" value="Result">
+
+    <td th:text="${messageCalculator}"/>
+</form>
+
+</body>
+</html>

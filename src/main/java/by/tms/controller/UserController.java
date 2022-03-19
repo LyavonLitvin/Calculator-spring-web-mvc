@@ -1,36 +1,52 @@
 package by.tms.controller;
 
 import by.tms.entity.User;
+import by.tms.service.InMemoryUsersService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
+    private InMemoryUsersService inMemoryUsersService;
+
+    @Autowired
+    public UserController(InMemoryUsersService inMemoryUsersService) {
+        this.inMemoryUsersService = inMemoryUsersService;
+    }
+
+    @GetMapping()
+    public String showAllUsers(Model model) {
+        model.addAttribute("users", inMemoryUsersService.getUsers());
+        return "user/users";
+    }
+
+    @GetMapping("/{id}")
+    public String showByIdUser(@PathVariable("id") int id, Model model) {
+        model.addAttribute("user", inMemoryUsersService.getByUserId(id));
+        return "user/user";
+    }
+
+
     @GetMapping("/reg")
-    public String reg(@ModelAttribute("newUser") User user, Model model){
-        return "reg";
+    public String newUser(@ModelAttribute("user") User user) {
+        return "user/reg";
     }
 
     @PostMapping("/reg")
-    public String reg(@Valid @ModelAttribute("newUser") User user, Model model, BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
-            Map<String, String> map = new HashMap<>();
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                map.put(fieldError.getField(), fieldError.getDefaultMessage());
-            }
-            model.addAllAttributes(map);
+    public String create(@Valid @ModelAttribute("user") User user, Model model, BindingResult bindingResult) {
 
-            return "reg";
+        if (bindingResult.hasErrors()) {
+            return "user/reg";
         }
-        return "redirect:/test";
+
+        inMemoryUsersService.addUser(user);
+        return "redirect:/user";
     }
 }

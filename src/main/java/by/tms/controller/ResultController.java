@@ -1,34 +1,36 @@
 package by.tms.controller;
 
 import by.tms.entity.Result;
-import by.tms.service.ResultService;
+import by.tms.service.InMemoryResultService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
+
 @Controller
-@RequestMapping("/calc")
+@RequestMapping("calculator/calc")
 public class ResultController {
 
-    ResultService resultService = new ResultService();
+    InMemoryResultService resultService = new InMemoryResultService();
     Result result;
 
     @GetMapping
     public String calc() {
-        return "calc";
+        return "calculator/calc";
     }
 
     @PostMapping
-    public String calc(int firstNumber, int secondNumber, String operatorType, Model model) {
-        model.addAttribute("firstNumber", firstNumber);
-        model.addAttribute("secondNumber", secondNumber);
-        model.addAttribute("operatorType", operatorType);
-        result = new Result(firstNumber, secondNumber, operatorType);
-        resultService.calculation(result);
-        model.addAttribute("messageCalculator", result.toString());
-        return "redirect:/calc";  ///pages/calc.jsp
+    public String calc(@Valid @ModelAttribute("result") Result result, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()){
+            return "calculator/calc";
+        }
+        model.addAttribute("messageCalculator", resultService.getCalculationResult(result));
+        return "calculator/calc";
     }
 
 }

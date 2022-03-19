@@ -61,6 +61,7 @@ hs_err_pid*
 .idea
 .idea/*
 .idea/**
+Calculator-spring-web-mvc.iml
 
 # Generated files
 .idea/**/contentModel.xml
