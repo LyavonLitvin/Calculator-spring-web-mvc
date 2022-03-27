@@ -1,22 +1,29 @@
 package by.tms.service;
 
+import by.tms.dao.hibernate.HibernateResultsDAO;
+import by.tms.dao.hibernate.HibernateUserDAO;
 import by.tms.entity.Result;
-import by.tms.dao.inmemory.InMemoryResultsStorage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import by.tms.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.stream.Collectors;
+import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpSession;
+
+@Service
 @Component
-public class InMemoryResultService {
+public class HibernateResultService {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    HibernateResultsDAO hibernateResultsDAO;
 
-    InMemoryResultsStorage inMemoryResultsStorage = InMemoryResultsStorage.getInstance();
+    @Autowired
+    HibernateUserDAO hibernateUserDAO;
 
-    public InMemoryResultService() {
+    public HibernateResultService() {
     }
 
     public Result getCalculationResult(Result result) {
@@ -32,7 +39,6 @@ public class InMemoryResultService {
             resultNumber = divide(result.getFirstNumber(), result.getSecondNumber());
         }
         result.setResultNumber(resultNumber);
-        addResult(result);
         return result;
     }
 
@@ -52,20 +58,15 @@ public class InMemoryResultService {
         return a + b;
     }
 
-    public void addResult(Result result) {
-        inMemoryResultsStorage.addResult(result);
-    }
-
-    public ArrayList<Result> getResults(int userId) {
-        ArrayList<String> selectedResult = inMemoryResultsStorage.getAll(userId).stream()
-                .collect(Collectors.toCollection(ArrayList::new));
-        return selectedResult;
-    }
-
-    public void deleteResults() {
-        inMemoryResultsStorage.deleteAll();
+    public void save(HttpSession session, Result result) {
+        User user = (User) session.getAttribute("user");
+        List<Result> resultList = user.getResultList();
+        resultList.add(result);
+        user.setResultList(resultList);
+        hibernateUserDAO.update(user);
     }
 }
+
 
 
 

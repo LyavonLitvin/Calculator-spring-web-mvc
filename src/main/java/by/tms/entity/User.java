@@ -1,111 +1,60 @@
 package by.tms.entity;
 
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.Pattern;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import javax.persistence.*;
+import java.util.List;
 
+
+@Entity
+@Table(name="users")
 public class User {
 
-    private int idUser;
-    private int userRoleId;
-    @NotBlank // " " true
-    @NotEmpty //"    " false
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+//    @NotBlank // " " true
+//    @NotEmpty //"    " false
     //	@Pattern()
 //	@Max(45)
 //	@Range(min = 3, max = 15)
 //	@Size()
 //	@Email(regexp = "")
-    private String name;
     @NotBlank(message = Constants.MSG_ERROR_LOGIN_IS_BLANK)
     @NotEmpty(message = Constants.MSG_ERROR_LOGIN_IS_EMPTY)
     private String login;
     @NotBlank(message = Constants.MSG_ERROR_PASSWORD_IS_BLANK)
     @NotEmpty(message = Constants.MSG_ERROR_PASSWORD_IS_EMPTY)
     private String password;
+    @NotBlank(message = Constants.MSG_ERROR_EMAIL_IS_BLANK)
+    @NotEmpty(message = Constants.MSG_ERROR_EMAIL_IS_EMPTY)
     private String email;
-    private String secretQuestion;
-    private Timestamp userUpdateDate;
+//    @NotBlank(message = Constants.MSG_ERROR_SECRET_QUESTION_IS_BLANK)
+//    @NotEmpty(message = Constants.MSG_ERROR_SECRET_QUESTION_IS_EMPTY)
+//    private String secretQuestion;
+//    private Timestamp userUpdateDate;
     //   private String sessionID;
 
-    public User(int userRoleId, String name, String login, String password, String email, String secretQuestion, Timestamp userUpdateDate, String sessionID) {
-        this.userRoleId = userRoleId;
-        this.name = name;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Result> resultList;
+
+    public User() {
+    }
+
+    public User(long id, String login, String password, String email) {
+        this.id = id;
         this.login = login;
         this.password = password;
         this.email = email;
-        this.secretQuestion = secretQuestion;
-        this.userUpdateDate = userUpdateDate;
-        // this.sessionID = sessionID;
     }
 
-    public User(int idUser, int userRoleId, String name, String login, String password, String email, String secretQuestion, Timestamp userUpdateDate) {
-        this.idUser = idUser;
-        this.userRoleId = userRoleId;
-        this.name = name;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.secretQuestion = secretQuestion;
-        this.userUpdateDate = Timestamp.valueOf(LocalDateTime.now());
+    public long getId() {
+        return id;
     }
 
-    public User(int userRoleId, String name, String login, String password, String email, String secretQuestion) {
-        this.userRoleId = userRoleId;
-        this.name = name;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.secretQuestion = secretQuestion;
-        this.userUpdateDate = Timestamp.valueOf(LocalDateTime.now());
-    }
-
-    public User(int idUser, int userRoleId, String name, String login, String password, String email, String secretQuestion) {
-        this.idUser = idUser;
-        this.userRoleId = userRoleId;
-        this.name = name;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.secretQuestion = secretQuestion;
-        this.userUpdateDate = Timestamp.valueOf(LocalDateTime.now());
-    }
-
-    public User(int idUser, int userRoleId, String name, String login, String password, String email, String secretQuestion, String sessionID) {
-        this.idUser = idUser;
-        this.userRoleId = userRoleId;
-        this.name = name;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.secretQuestion = secretQuestion;
-        this.userUpdateDate = Timestamp.valueOf(LocalDateTime.now());
-        //  this.sessionID = sessionID;
-    }
-
-//    public User(String name, String username, String password) {
-//        this.name = name;
-//        this.login = username;
-//        this.password = password;
-//    }
-//
-//    public User(String name, String login, String password, String sessionId) {
-//        this.name = name;
-//        this.login = login;
-//        this.password = password;
-//        this.sessionID = sessionId;
-//    }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getLogin() {
@@ -124,30 +73,6 @@ public class User {
         this.password = password;
     }
 
-    public int getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
-    }
-
-    public int getUserRoleId() {
-        return userRoleId;
-    }
-
-    public void setUserRoleId(int userRoleId) {
-        this.userRoleId = userRoleId;
-    }
-
-    public Timestamp getUserUpdateDate() {
-        return userUpdateDate;
-    }
-
-    public void setUserUpdateDate(Timestamp userUpdateDate) {
-        this.userUpdateDate = Timestamp.valueOf(LocalDateTime.now());
-    }
-
     public String getEmail() {
         return email;
     }
@@ -156,21 +81,23 @@ public class User {
         this.email = email;
     }
 
-    public String getSecretQuestion() {
-        return secretQuestion;
+    public List<Result> getResultList() {
+        return resultList;
     }
 
-    public void setSecretQuestion(String secretQuestion) {
-        this.secretQuestion = secretQuestion;
+    public void setResultList(List<Result> resultList) {
+        this.resultList = resultList;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "name='" + name + '\'' +
+                "id=" + id +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }
+
 

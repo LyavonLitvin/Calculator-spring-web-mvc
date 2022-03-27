@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Calculator Page</title>
+    <div th:insert="fragment/bootstrap :: cdncss"></div>
 </head>
 <body>
+<div th:insert="fragment/toolbar :: top"></div>
 
 <form th:method="post" th:action="@{/calc}" th:object="${result}">
-    <input type="text" th:field="*{firstNumber}" id="value1" placeholder="Value 1">
+    <input type="text" th:field="*{firstNumber}" id="firstNumber" placeholder="firstNumber">
     <td th:if="${#fields.hasErrors('firstNumber')}" th:errors="*{firstNumber}">firstNumber error</td>
 
     <br/>
@@ -30,7 +32,7 @@
 
     <input type="submit" value="Result">
 
-    <td th:text="${messageCalculator}"/>
+    <td th:text="${msgResult}"/>
 </form>
 
 </body>

@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>User page</title>
+    <div th:insert="fragment/bootstrap :: cdncss"></div>
 </head>
 <body>
+<div th:insert="fragment/toolbar :: top"></div>
 
 User ID:  <td th:text="${user.getIdUser()}">User ID</td> <br/>
 User name <td th:text="${user.getName()}">User Name</td> <br/>
@@ -15,7 +17,7 @@ User e-mail: <td th:text="${user.getEmail()}">User E-mail</td>
 
 <br/>
 
-<form th:method="get" th:action="@{/user/{id}/edit(id=${user.getIdUser()})}">
+<form th:method="GET" th:action="@{/user/{id}/edit(id=${user.getIdUser()})}">
     <input type="submit" value="Edit user">
 </form>
 

@@ -1,12 +1,18 @@
 package by.tms.entity;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
+@Entity
+@Table(name="results")
 public class Result {
-    private int resultId;
-    private int resultCreatorId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @ManyToOne
+    private User user;
+
     @NotNull(message = Constants.MSG_ERROR_VALUE1_IS_NULL)
     private double firstNumber;
 
@@ -16,7 +22,6 @@ public class Result {
     @NotNull(message = Constants.MSG_ERROR_OPERATOR_IS_NULL)
     private String operatorType;
     private double resultNumber;
-    private Timestamp resultUpdateDate;
 
     public Result() {
     }
@@ -27,27 +32,51 @@ public class Result {
         this.operatorType = operatorType;
     }
 
-    public Result(double firstNumber, double secondNumber, String operatorType, int userId) {
+    public Result(double firstNumber, double secondNumber, String operatorType, User user) {
         this.firstNumber = firstNumber;
         this.secondNumber = secondNumber;
         this.operatorType = operatorType;
-        this.resultCreatorId = userId;
+        this.user = user;
     }
 
-    public int getResultId() {
-        return resultId;
+    public Result(long id, User user, double firstNumber, double secondNumber, String operatorType, double resultNumber) {
+        this.id = id;
+        this.user = user;
+        this.firstNumber = firstNumber;
+        this.secondNumber = secondNumber;
+        this.operatorType = operatorType;
+        this.resultNumber = resultNumber;
     }
 
-    public void setResultId(int resultId) {
-        this.resultId = resultId;
+    public Result(User user, double firstNumber, double secondNumber, String operatorType, double resultNumber) {
+        this.user = user;
+        this.firstNumber = firstNumber;
+        this.secondNumber = secondNumber;
+        this.operatorType = operatorType;
+        this.resultNumber = resultNumber;
     }
 
-    public int getResultCreatorId() {
-        return resultCreatorId;
+    public Result(double firstNumber, double secondNumber, String operatorType, double resultNumber) {
+        this.firstNumber = firstNumber;
+        this.secondNumber = secondNumber;
+        this.operatorType = operatorType;
+        this.resultNumber = resultNumber;
     }
 
-    public void setResultCreatorId(int resultCreatorId) {
-        this.resultCreatorId = resultCreatorId;
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public double getFirstNumber() {
@@ -82,17 +111,9 @@ public class Result {
         this.resultNumber = resultNumber;
     }
 
-    public Timestamp getResultUpdateDate() {
-        return resultUpdateDate;
-    }
-
-    public void setResultUpdateDate(Timestamp resultUpdateDate) {
-        this.resultUpdateDate = resultUpdateDate;
-    }
-
     @Override
     public String toString() {
-        return " " + firstNumber + " " + operatorType + " " + secondNumber + " = " + resultNumber + " ";
+        return " " + id + " " + firstNumber + " " + operatorType + " " + secondNumber + " = " + resultNumber + " ";
     }
 
 
