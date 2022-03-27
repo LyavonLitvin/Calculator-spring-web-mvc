@@ -1,10 +1,10 @@
 package by.tms.controller;
 
-import by.tms.dao.hibernate.HibernateResultsDAO;
+import by.tms.dao.jpa.JPAResultDAO;
 
 import by.tms.entity.Result;
 import by.tms.entity.User;
-import by.tms.service.HibernateResultService;
+import by.tms.service.ResultService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,22 +17,22 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Component
-@RequestMapping("calculator/history")
+@RequestMapping("calc")
 public class HistoryController {
 
     @Autowired
-    HibernateResultService hibernateResultService;
+    ResultService resultService;
 
     @Autowired
-    HibernateResultsDAO hibernateResultsDAO;
+    JPAResultDAO jpaResultsDAO;
 
 
-    @GetMapping("calculator/history")
+    @GetMapping("/history")
     public String history(HttpSession session, Model model) {
         if (session.getAttribute("user") == null) {
             return "redirect:/";
         } else {
-            List<Result> resultList = hibernateResultsDAO.findAllByUser((User) session.getAttribute("user"));
+            List<Result> resultList = jpaResultsDAO.findAllByUser((User) session.getAttribute("user"));
             model.addAttribute("resultsHistory", resultList);
             return "calculator/history";
         }

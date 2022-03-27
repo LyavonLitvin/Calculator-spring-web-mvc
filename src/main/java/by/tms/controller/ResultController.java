@@ -1,8 +1,8 @@
 package by.tms.controller;
 
-import by.tms.dao.hibernate.HibernateResultsDAO;
+import by.tms.dao.jpa.JPAResultDAO;
 import by.tms.entity.Result;
-import by.tms.service.HibernateResultService;
+import by.tms.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +20,10 @@ import javax.validation.Valid;
 public class ResultController {
 
     @Autowired
-    HibernateResultService hibernateResultService;
+    ResultService resultService;
 
     @Autowired
-    HibernateResultsDAO hibernateResultsDAO;
+    JPAResultDAO jpaResultDAO;
 
     @GetMapping
     public String calc(@ModelAttribute("result") Result result) {
@@ -36,8 +36,8 @@ public class ResultController {
             return "calculator/calc";
         }
 
-        model.addAttribute("msgResult", hibernateResultService.getCalculationResult(result));
-        hibernateResultService.save(session, result);
+        model.addAttribute("msgResult", resultService.getCalculationResult(result));
+        resultService.save(session, result);
         return "calculator/calc";
     }
 }

@@ -10,18 +10,18 @@ import org.springframework.stereotype.Component;
 public class UserValidator {
 
     @Autowired
-    private HibernateUserDAO hibernateUserDAO;
+    private HibernateUserDAO JPAUserDAO;
 
     public boolean isValid(UserDTO userDTO) {
         return isValidUserName(userDTO) && isValidUserPassword(userDTO);
     }
 
     private boolean isValidUserName(UserDTO userDTO) {
-        return hibernateUserDAO.findAllByName(userDTO.getLogin()).size() != 0;
+        return JPAUserDAO.findAllByName(userDTO.getLogin()).size() != 0;
     }
 
     private boolean isValidUserPassword(UserDTO userDTO) {
-        User user = hibernateUserDAO.findByUsername(userDTO.getLogin());
+        User user = JPAUserDAO.findByUsername(userDTO.getLogin());
         return user.getPassword().equals(userDTO.getPassword());
     }
 

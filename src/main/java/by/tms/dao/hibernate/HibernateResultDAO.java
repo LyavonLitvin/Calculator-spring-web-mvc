@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class HibernateResultsDAO {
+public class HibernateResultDAO {
 
     @Autowired
     private SessionFactory sessionFactory;
